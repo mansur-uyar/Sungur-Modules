@@ -1,483 +1,196 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sungur Framework</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .card {
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .card:hover {
-            transform: translateY(-1px);
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Modül Haritası – Basit HTML Şablonu</title>
+  <style>
+    :root{
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --radius:14px;
+      --shadow:0 6px 14px rgba(17,24,39,.06),0 2px 6px rgba(17,24,39,.04);
+      --pill:#eef2ff;
+      --pill-text:#374151;
+      --maxw:1400px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Noto Sans",sans-serif;
+      background:var(--bg); color:#0f172a;
+    }
+    header{
+      position:sticky; top:0; z-index:10; backdrop-filter:saturate(1.3) blur(6px);
+      background:linear-gradient(180deg, rgba(245,247,251,.9), rgba(245,247,251,.65) 60%, rgba(245,247,251,0));
+      border-bottom:1px solid rgba(0,0,0,.05); padding:14px 16px;
+    }
+    header .wrap{max-width:var(--maxw); margin:0 auto; display:flex; align-items:center; gap:12px}
+    .brand{font-weight:800; letter-spacing:.2px}
+    .hint{color:var(--muted); font-size:.92rem}
+
+    .board{max-width:var(--maxw); margin:18px auto 48px; padding:0 16px;
+      display:grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap:18px;
+    }
+
+    .column{display:flex; flex-direction:column; gap:14px}
+    .col-head{
+      color:#fff; font-weight:800; padding:12px 14px; border-radius:var(--radius);
+      box-shadow:var(--shadow); border:1px solid rgba(0,0,0,.05);
+    }
+    .col-head small{display:block; opacity:.85; font-weight:600}
+
+    .section{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
+      border:1px solid rgba(0,0,0,.06); overflow:hidden
+    }
+    .section h3{margin:0; padding:12px 14px; font-size:1rem; border-bottom:1px solid rgba(0,0,0,.06); background:#fafafa}
+    .items{display:flex; flex-direction:column; gap:10px; padding:12px}
+
+    .item{display:flex; align-items:center; justify-content:space-between; gap:10px;
+      background:var(--pill); color:var(--pill-text); border-radius:10px; padding:10px 12px;
+      border:1px solid rgba(0,0,0,.05); font-weight:600; font-size:.95rem;
+      transition:transform .12s ease, box-shadow .12s ease;
+    }
+    .item:hover{transform:translateY(-1px); box-shadow:0 6px 12px rgba(0,0,0,.06)}
+
+    /* renk varyantları */
+    .blue   { --pill:#eef2ff; --pill-text:#1f2a7c; }
+    .green  { --pill:#ecfdf5; --pill-text:#065f46; }
+    .orange { --pill:#fff7ed; --pill-text:#9a3412; }
+    .yellow { --pill:#fefce8; --pill-text:#7a5c0a; }
+    .red    { --pill:#fee2e2; --pill-text:#7f1d1d; }
+    .purple { --pill:#f3e8ff; --pill-text:#6b21a8; }
+    .gray   { --pill:#f3f4f6; --pill-text:#374151; }
+
+    /* küçük ekranlar için daha sıkı aralıklar */
+    @media (max-width:480px){
+      .items{gap:8px}
+      .item{padding:9px 10px}
+    }
+  </style>
 </head>
-<body class="min-h-screen bg-gray-100">
-    <div class="w-full px-3 pt-4">
-        <!-- Main Grid -->
-        <div class="grid grid-cols-10 gap-4">
-            <!-- Core Section -->
-            <div class="col-span-3">
-                <div class="card bg-blue-600 rounded h-8 flex items-center justify-center shadow-lg">
-                    <h2 class="text-white text-sm font-bold">Core</h2>
-                </div>
-                
-                <!-- Core sub-components -->
-                <div class="grid grid-cols-3 gap-2 mt-2">
-                    <!-- Common Framework -->
-                    <div class="space-y-1">
-                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1" onclick="openPopup('common-framework')" title="Common Framework">
-                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate">Common Framework</h4>
-                        </div>
-                        <div class="space-y-1">
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('authentication')" title="Authentication">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Authentication</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('authorization')" title="Authorization">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Authorization</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('reusable-components')" title="Reusable Components">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Reusable Components</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('menu-navigation')" title="Menu & Navigation">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Menu & Navigation</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('home')" title="Home">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Home</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('my-space')" title="My Space">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">My Space</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('quick-search')" title="Quick Search">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Quick Search</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('detailed-search')" title="Detailed Search">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Detailed Search</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('help-about')" title="Help & About">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Help & About</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('announcements')" title="Announcements">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Announcements</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('record-history')" title="Record History">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Record History</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('record-activity-history')" title="Record Activity History">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Record Activity History</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('filtering-sorting')" title="Filtering / Sorting">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Filtering / Sorting</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('filter-saving')" title="Filter Saving">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Filter Saving</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('excel-export')" title="Excel Export">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Excel Export</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('bulk-operations')" title="Bulk Operations">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Bulk Operations</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('attachments')" title="Attachments">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Attachments</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('api-integration')" title="API & Integration">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">API & Integration</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('system-configuration')" title="System Configuration">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">System Configuration</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('global-error-handling')" title="Global Error Handling">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Global Error Handling</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('global-data-validation')" title="Global Data Validation">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Global Data Validation</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('global-loading-states')" title="Global Loading States">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Global Loading States</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('audit-logging')" title="Audit Logging">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Audit Logging</h5>
-                            </div>
-                            <div class="card bg-violet-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('application-logging')" title="Application Logging">
-                                <h5 class="text-[9px] font-medium text-violet-800 text-center truncate">Application Logging</h5>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Master Data Management -->
-                    <div class="space-y-1">
-                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1" onclick="openPopup('master-data-management')" title="Master Data Management">
-                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate">Master Data Management</h4>
-                        </div>
-                        <div class="space-y-1">
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('routing-tables')" title="Routing Tables">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Routing Tables</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('products-services')" title="Products & Services">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Products & Services</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('stations')" title="Stations">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Stations</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('airports')" title="Airports">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Airports</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('airport-pairs')" title="Airport Pairs">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Airport Pairs</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('countries')" title="Countries">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Countries</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('cities')" title="Cities">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Cities</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('city-pairs')" title="City Pairs">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">City Pairs</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('regions')" title="Regions">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Regions</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('airport-calendars')" title="Airport Calendars">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Airport Calendars</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('airlines')" title="Airlines">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Airlines</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('categories')" title="Categories">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Categories</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('commodities')" title="Commodities">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Commodities</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('iata-commodities')" title="IATA Commodities">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">IATA Commodities</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('handling-codes')" title="Handling Codes">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Handling Codes</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('currencies')" title="Currencies">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Currencies</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('exchange-rates')" title="Exchange Rates">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Exchange Rates</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('aircraft-types')" title="Aircraft Types">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Aircraft Types</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('aircraft-equipment-types')" title="Aircraft Equipment Types">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Aircraft Equipment Types</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('general-masters')" title="General Masters">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">General Masters</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('generic-masters')" title="Generic Masters">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Generic Masters</h5>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Core Functions -->
-                    <div class="space-y-1">
-                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1" onclick="openPopup('core-functions')" title="Core Functions">
-                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate">Core Functions</h4>
-                        </div>
-                        <div class="space-y-1">
-                            <div class="card bg-gray-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('user-user-group-management')" title="User & User Group Management">
-                                <h5 class="text-[9px] font-medium text-gray-800 text-center truncate">User & User Group Management</h5>
-                            </div>
-                            <div class="card bg-gray-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('role-role-group-management')" title="Role & Role Group Management">
-                                <h5 class="text-[9px] font-medium text-gray-800 text-center truncate">Role & Role Group Management</h5>
-                            </div>
-                            <div class="card bg-gray-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('permission-scope-management')" title="Permission (Scope) Management">
-                                <h5 class="text-[9px] font-medium text-gray-800 text-center truncate">Permission (Scope) Management</h5>
-                            </div>
-                            <div class="card bg-gray-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('parameter-management')" title="Parameter Management">
-                                <h5 class="text-[9px] font-medium text-gray-800 text-center truncate">Parameter Management</h5>
-                            </div>
-                            <div class="card bg-gray-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('notification-management')" title="Notification Management">
-                                <h5 class="text-[9px] font-medium text-gray-800 text-center truncate">Notification Management</h5>
-                            </div>
-                            <div class="card bg-gray-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('purging-archiving')" title="Purging & Archiving">
-                                <h5 class="text-[9px] font-medium text-gray-800 text-center truncate">Purging & Archiving</h5>
-                            </div>
-                            <div class="card bg-gray-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('scheduled-jobs')" title="Scheduled Jobs">
-                                <h5 class="text-[9px] font-medium text-gray-800 text-center truncate">Scheduled Jobs</h5>
-                            </div>
-                            <div class="card bg-gray-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('workflows')" title="Workflows">
-                                <h5 class="text-[9px] font-medium text-gray-800 text-center truncate">Workflows</h5>
-                            </div>
-                            <div class="card bg-gray-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('messaging')" title="Messaging">
-                                <h5 class="text-[9px] font-medium text-gray-800 text-center truncate">Messaging</h5>
-                            </div>
-                            <div class="card bg-gray-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('reporting')" title="Reporting">
-                                <h5 class="text-[9px] font-medium text-gray-800 text-center truncate">Reporting</h5>
-                            </div>
-                            <div class="card bg-gray-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('dashboards')" title="Dashboards">
-                                <h5 class="text-[9px] font-medium text-gray-800 text-center truncate">Dashboards</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Sales Section -->
-            <div class="col-span-7">
-                <div class="card bg-green-600 rounded h-8 flex items-center justify-center shadow-lg">
-                    <h2 class="text-white text-sm font-bold">Sales</h2>
-                </div>
-                
-                <!-- Sales sub-components - First Row -->
-                <div class="grid grid-cols-5 gap-2 mt-2">
-                    <!-- Customer Management -->
-                    <div class="space-y-1">
-                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1" onclick="openPopup('customer-management')" title="Customer Management">
-                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate">Customer Management</h4>
-                        </div>
-                        <div class="space-y-1">
-                            <div class="card bg-pink-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('maintain-customer')" title="Maintain Customer">
-                                <h5 class="text-[9px] font-medium text-pink-800 text-center truncate">Maintain Customer</h5>
-                            </div>
-                            <div class="card bg-pink-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('list-customers')" title="List Customers">
-                                <h5 class="text-[9px] font-medium text-pink-800 text-center truncate">List Customers</h5>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Schedule & Flight Management -->
-                    <div class="space-y-1">
-                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1" onclick="openPopup('schedule-flight-management')" title="Schedule & Flight Management">
-                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate">Schedule & Flight Management</h4>
-                        </div>
-                        <div class="space-y-1">
-                            <div class="card bg-blue-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('maintain-flight-schedules')" title="Maintain Flight Schedules">
-                                <h5 class="text-[9px] font-medium text-blue-800 text-center truncate">Maintain Flight Schedules</h5>
-                            </div>
-                            <div class="card bg-blue-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('list-flight-schedules')" title="List Flight Schedules">
-                                <h5 class="text-[9px] font-medium text-blue-800 text-center truncate">List Flight Schedules</h5>
-                            </div>
-                            <div class="card bg-blue-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('maintain-operational-flights')" title="Maintain Operational Flights">
-                                <h5 class="text-[9px] font-medium text-blue-800 text-center truncate">Maintain Operational Flights</h5>
-                            </div>
-                            <div class="card bg-blue-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('list-operational-flights')" title="List Operational Flights">
-                                <h5 class="text-[9px] font-medium text-blue-800 text-center truncate">List Operational Flights</h5>
-                            </div>
-                            <div class="card bg-blue-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('mark-flight-movements')" title="Mark Flight Movements">
-                                <h5 class="text-[9px] font-medium text-blue-800 text-center truncate">Mark Flight Movements</h5>
-                            </div>
-                            <div class="card bg-blue-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('flight-notes')" title="Flight Notes">
-                                <h5 class="text-[9px] font-medium text-blue-800 text-center truncate">Flight Notes</h5>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Tariff & Rating & Spot Management -->
-                    <div class="space-y-1">
-                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1" onclick="openPopup('tariff-rating-spot-management')" title="Tariff & Rating & Spot Management">
-                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate">Tariff & Rating & Spot Management</h4>
-                        </div>
-                        <div class="space-y-1">
-                            <div class="card bg-orange-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('maintain-rate-cards')" title="Maintain Rate Cards">
-                                <h5 class="text-[9px] font-medium text-orange-800 text-center truncate">Maintain Rate Cards</h5>
-                            </div>
-                            <div class="card bg-orange-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('list-rate-cards')" title="List Rate Cards">
-                                <h5 class="text-[9px] font-medium text-orange-800 text-center truncate">List Rate Cards</h5>
-                            </div>
-                            <div class="card bg-orange-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('maintain-tariffs')" title="Maintain Tariffs">
-                                <h5 class="text-[9px] font-medium text-orange-800 text-center truncate">Maintain Tariffs</h5>
-                            </div>
-                            <div class="card bg-orange-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('list-tariffs')" title="List Tariffs">
-                                <h5 class="text-[9px] font-medium text-orange-800 text-center truncate">List Tariffs</h5>
-                            </div>
-                            <div class="card bg-orange-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('maintain-charge-heads')" title="Maintain Charge Heads">
-                                <h5 class="text-[9px] font-medium text-orange-800 text-center truncate">Maintain Charge Heads</h5>
-                            </div>
-                            <div class="card bg-orange-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('list-charge-heads')" title="List Charge Heads">
-                                <h5 class="text-[9px] font-medium text-orange-800 text-center truncate">List Charge Heads</h5>
-                            </div>
-                            <div class="card bg-orange-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('maintain-spot-rate-requests')" title="Maintain Spot Rate Requests">
-                                <h5 class="text-[9px] font-medium text-orange-800 text-center truncate">Maintain Spot Rate Requests</h5>
-                            </div>
-                            <div class="card bg-orange-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('list-spot-rate-requests')" title="List Spot Rate Requests">
-                                <h5 class="text-[9px] font-medium text-orange-800 text-center truncate">List Spot Rate Requests</h5>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Capacity Management -->
-                    <div class="space-y-1">
-                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1" onclick="openPopup('capacity-management')" title="Capacity Management">
-                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate">Capacity Management</h4>
-                        </div>
-                        <div class="space-y-1">
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('list-allotments')" title="List Allotments">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">List Allotments</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('maintain-allotments')" title="Maintain Allotments">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Maintain Allotments</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('list-allotment-requests')" title="List Allotment Requests">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">List Allotment Requests</h5>
-                            </div>
-                            <div class="card bg-green-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('maintain-allotment-requests')" title="Maintain Allotment Requests">
-                                <h5 class="text-[9px] font-medium text-green-800 text-center truncate">Maintain Allotment Requests</h5>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Booking & Reservations -->
-                    <div class="space-y-1">
-                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1" onclick="openPopup('booking-reservations')" title="Booking & Reservations">
-                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate">Booking & Reservations</h4>
-                        </div>
-                        <div class="space-y-1">
-                            <div class="card bg-purple-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('maintain-booking')" title="Maintain Booking">
-                                <h5 class="text-[9px] font-medium text-purple-800 text-center truncate">Maintain Booking</h5>
-                            </div>
-                            <div class="card bg-purple-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('list-bookings')" title="List Bookings">
-                                <h5 class="text-[9px] font-medium text-purple-800 text-center truncate">List Bookings</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Sales sub-components - Second Row -->
-                <div class="grid grid-cols-5 gap-2 mt-2">
-                    <!-- AWB Stock Management -->
-                    <div class="space-y-1">
-                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1" onclick="openPopup('awb-stock-management')" title="AWB Stock Management">
-                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate">AWB Stock Management</h4>
-                        </div>
-                        <div class="space-y-1">
-                            <div class="card bg-teal-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('maintain-stock')" title="Maintain Stock">
-                                <h5 class="text-[9px] font-medium text-teal-800 text-center truncate">Maintain Stock</h5>
-                            </div>
-                            <div class="card bg-teal-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('view-stocks')" title="View Stocks">
-                                <h5 class="text-[9px] font-medium text-teal-800 text-center truncate">View Stocks</h5>
-                            </div>
-                            <div class="card bg-teal-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('maintain-stock-requests')" title="Maintain Stock Requests">
-                                <h5 class="text-[9px] font-medium text-teal-800 text-center truncate">Maintain Stock Requests</h5>
-                            </div>
-                            <div class="card bg-teal-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('list-stock-requests')" title="List Stock Requests">
-                                <h5 class="text-[9px] font-medium text-teal-800 text-center truncate">List Stock Requests</h5>
-                            </div>
-                            <div class="card bg-teal-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('maintain-stock-holders')" title="Maintain Stock Holders">
-                                <h5 class="text-[9px] font-medium text-teal-800 text-center truncate">Maintain Stock Holders</h5>
-                            </div>
-                            <div class="card bg-teal-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('list-stock-holders')" title="List Stock Holders">
-                                <h5 class="text-[9px] font-medium text-teal-800 text-center truncate">List Stock Holders</h5>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Shipment Tracking -->
-                    <div class="space-y-1">
-                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1" onclick="openPopup('shipment-tracking')" title="Shipment Tracking">
-                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate">Shipment Tracking</h4>
-                        </div>
-                        <div class="space-y-1">
-                            <div class="card bg-blue-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('list-shipments')" title="List Shipments">
-                                <h5 class="text-[9px] font-medium text-blue-800 text-center truncate">List Shipments</h5>
-                            </div>
-                            <div class="card bg-blue-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('external-shipment-tracking')" title="External Shipment Tracking">
-                                <h5 class="text-[9px] font-medium text-blue-800 text-center truncate">External Shipment Tracking</h5>
-                            </div>
-                            <div class="card bg-blue-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('internal-shipment-tracking')" title="Internal Shipment Tracking">
-                                <h5 class="text-[9px] font-medium text-blue-800 text-center truncate">Internal Shipment Tracking</h5>
-                            </div>
-                            <div class="card bg-blue-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('house-awb-tracking')" title="House AWB Tracking">
-                                <h5 class="text-[9px] font-medium text-blue-800 text-center truncate">House AWB Tracking</h5>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Claim Management -->
-                    <div class="space-y-1">
-                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1" onclick="openPopup('claim-management')" title="Claim Management">
-                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate">Claim Management</h4>
-                        </div>
-                        <div class="space-y-1">
-                            <div class="card bg-red-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('list-claims')" title="List Claims">
-                                <h5 class="text-[9px] font-medium text-red-800 text-center truncate">List Claims</h5>
-                            </div>
-                            <div class="card bg-red-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('maintain-claim')" title="Maintain Claim">
-                                <h5 class="text-[9px] font-medium text-red-800 text-center truncate">Maintain Claim</h5>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Restrictions & Embargo Management -->
-                    <div class="space-y-1">
-                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1" onclick="openPopup('restrictions-embargo-management')" title="Restrictions & Embargo Management">
-                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate">Restrictions & Embargo Management</h4>
-                        </div>
-                        <div class="space-y-1">
-                            <div class="card bg-yellow-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('maintain-embargo-restrictions')" title="Maintain Embargo & Restrictions">
-                                <h5 class="text-[9px] font-medium text-yellow-800 text-center truncate">Maintain Embargo & Restrictions</h5>
-                            </div>
-                            <div class="card bg-yellow-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('list-embargo-restrictions')" title="List Embargo & Restrictions">
-                                <h5 class="text-[9px] font-medium text-yellow-800 text-center truncate">List Embargo & Restrictions</h5>
-                            </div>
-                            <div class="card bg-yellow-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('maintain-compliance-rules')" title="Maintain Compliance Rules">
-                                <h5 class="text-[9px] font-medium text-yellow-800 text-center truncate">Maintain Compliance Rules</h5>
-                            </div>
-                            <div class="card bg-yellow-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('list-compliance-rules')" title="List Compliance Rules">
-                                <h5 class="text-[9px] font-medium text-yellow-800 text-center truncate">List Compliance Rules</h5>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Special Cargo Management -->
-                    <div class="space-y-1">
-                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1" onclick="openPopup('special-cargo-management')" title="Special Cargo Management">
-                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate">Special Cargo Management</h4>
-                        </div>
-                        <div class="space-y-1">
-                            <div class="card bg-indigo-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('maintain-special-cargo')" title="Maintain Special Cargo">
-                                <h5 class="text-[9px] font-medium text-indigo-800 text-center truncate">Maintain Special Cargo</h5>
-                            </div>
-                            <div class="card bg-indigo-50 rounded h-5 flex items-center justify-center shadow-sm px-1" onclick="openPopup('list-special-cargo')" title="List Special Cargo">
-                                <h5 class="text-[9px] font-medium text-indigo-800 text-center truncate">List Special Cargo</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="brand">📦 Modül Haritası</div>
+      <div class="hint">Tek dosya – HTML + CSS + ufak JS. Metni değiştirerek saniyeler içinde özelleştirin.</div>
     </div>
+  </header>
 
-    <!-- Popup Modal -->
-    <div id="popup" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 h-[95vh] overflow-y-auto">
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 id="popup-title" class="text-2xl font-bold text-gray-900"></h2>
-                    <button onclick="closePopup()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-                </div>
-                <div id="popup-content"></div>
-            </div>
-        </div>
-    </div>
+  <main class="board" id="board"></main>
 
-    <script>
-        function openPopup(type) {
-            const data = {
-                // Epic popups will be added here as needed
-            };
-            
-            if (data[type]) {
-                document.getElementById('popup-title').textContent = data[type].title;
-                document.getElementById('popup-content').innerHTML = data[type].content;
-                document.getElementById('popup').classList.remove('hidden');
-            }
+  <script>
+    // === 1) Burayı düzenleyin: Kolonlar, başlık renkleri, bölümler ve maddeler ===
+    const DATA = [
+      {
+        title: "Core",
+        subtitle: "Temel servisler ve ortak bileşenler",
+        color: "linear-gradient(135deg,#2a6df4,#4f8cff)",
+        sections: [
+          {
+            title: "Common Framework",
+            items: [
+              { label: "Authentication", tag: "blue" },
+              { label: "Authorization", tag: "blue" },
+              { label: "Reusable Components", tag: "gray" },
+              { label: "Menu & Navigation", tag: "gray" },
+              { label: "Record History", tag: "purple" },
+              { label: "Excel Export", tag: "green" }
+            ]
+          },
+          {
+            title: "Master Data Management",
+            items: [
+              { label: "Routing Tables", tag: "green" },
+              { label: "Products & Services", tag: "green" },
+              { label: "Airports", tag: "green" },
+              { label: "Currencies", tag: "yellow" },
+              { label: "IATA Commodities", tag: "yellow" }
+            ]
+          },
+          {
+            title: "Core Functions",
+            items: [
+              { label: "User & Group Mgmt", tag: "blue" },
+              { label: "Workflows", tag: "purple" },
+              { label: "Reporting", tag: "orange" },
+              { label: "Dashboards", tag: "orange" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "Sales",
+        subtitle: "Gelir, kapasite ve rezervasyon yönetimi",
+        color: "linear-gradient(135deg,#2fa649,#57c66a)",
+        sections: [
+          {
+            title: "Schedule & Flight Management",
+            items: [
+              { label: "Maintain Flight Schedules", tag: "blue" },
+              { label: "List Flight Schedules", tag: "blue" },
+              { label: "Mark Flight Movements", tag: "purple" }
+            ]
+          },
+          {
+            title: "Tariff & Rating",
+            items: [
+              { label: "Maintain Rate Cards", tag: "yellow" },
+              { label: "Maintain Tariffs", tag: "yellow" },
+              { label: "Maintain Charge Heads", tag: "yellow" }
+            ]
+          },
+          {
+            title: "Capacity & Booking",
+            items: [
+              { label: "List Allotments", tag: "green" },
+              { label: "Maintain Allotments", tag: "green" },
+              { label: "Maintain Booking", tag: "blue" },
+              { label: "List Bookings", tag: "blue" }
+            ]
+          },
+          {
+            title: "Shipment Tracking",
+            items: [
+              { label: "List Shipments", tag: "purple" },
+              { label: "External Shipment Tracking", tag: "purple" },
+              { label: "Internal Shipment Tracking", tag: "purple" }
+            ]
+          }
+        ]
+      }
+    ];
+
+    // === 2) Basit render ===
+    const $board = document.getElementById('board');
+
+    for (const col of DATA){
+      const colEl = document.createElement('section');
+      colEl.className = 'column';
+
+      const head = document.createElement('div');
+      head.className = 'col-head';
+      head.style.background = col.color;
+      head.innerHTML = `<div>${col.title}</div>${col.subtitle?`<small>${col.subtitle}</small>`:''}`;
+      colEl.appendChild(head);
+
+      for (const sec of col.sections){
+        const secEl = document.createElement('article');
+        secEl.className = 'section';
+        secEl.innerHTML = `<h3>${sec.title}</h3><div class="items"></div>`;
+        const itemsEl = secEl.querySelector('.items');
+        for (const it of sec.items){
+          const pill = document.createElement('div');
+          pill.className = `item ${it.tag||''}`;
+          pill.textContent = it.label;
+          itemsEl.appendChild(pill);
         }
+        colEl.appendChild(secEl);
+      }
 
-        function closePopup() {
-            document.getElementById('popup').classList.add('hidden');
-        }
-    </script>
+      $board.appendChild(colEl);
+    }
+  </script>
 </body>
 </html>
