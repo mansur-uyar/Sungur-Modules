@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sungur Framework - Squad Planning (Editable)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .card {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-1px);
+        }
+        .edit-input {
+            width: 100%;
+            border: 1px solid #ddd;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: inherit;
+        }
+        .editable:hover {
+            background-color: rgba(0,0,0,0.02);
+            border-radius: 2px;
+        }
+        .delete-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 2px;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .delete-btn:hover {
+            opacity: 1;
+        }
+        .item-row {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            min-height: 1.25rem;
+        }
+        .item-text {
+            flex: 1;
+            min-width: 0;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-100">
+    <div class="w-full px-3 pt-4">
+        <!-- Header with Save Button -->
+        <div class="flex justify-between items-center mb-4 px-2">
+            <h1 class="text-2xl font-bold text-gray-800 editable" data-section="global" data-key="mainTitle">Sungur Framework - Squad Planning</h1>
+            <div class="flex gap-2">
+                <button id="saveBtn" class="bg-blue-600 hover:bg-blue-800 text-white px-4 py-2 rounded shadow">
+                    💾 Kaydet
+                </button>
+                <button id="exportBtn" class="bg-green-600 hover:bg-green-800 text-white px-4 py-2 rounded shadow">
+                    📥 Export JSON
+                </button>
+                <button id="importBtn" class="bg-yellow-600 hover:bg-yellow-800 text-white px-4 py-2 rounded shadow">
+                    📤 Import JSON
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-10 gap-4">
+            <!-- Framework Section -->
+            <div class="col-span-1 md:col-span-3" id="framework-section">
+                <div class="card bg-orange-600 rounded h-8 flex items-center justify-center shadow-lg">
+                    <h2 class="text-white text-sm font-bold editable" data-section="framework" data-key="title">Framework</h2>
+                </div>
+                
+                <!-- Squad Planning for Framework -->
+                <div class="bg-orange-50 rounded-lg p-3 mt-2 mb-2 min-h-36">
+                    <h3 class="text-xs font-bold text-orange-800 mb-2 editable" data-section="framework" data-key="squadTitle">Squad Planning</h3>
+                    <div id="framework-squad-items" class="space-y-1 text-xs"></div>
+                    <button class="add-item-btn mt-2 bg-orange-500 hover:bg-orange-600 text-white text-xs px-2 py-1 rounded" data-section="framework" data-list="squadItems">
+                        + Satır Ekle
+                    </button>
+                </div>
+                
+                <!-- Core sub-components -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mt-2">
+                    <!-- Framework Column -->
+                    <div class="space-y-1">
+                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1">
+                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate editable" data-section="framework" data-key="col1Title">Framework</h4>
+                        </div>
+                        <div id="framework-col1-items" class="space-y-1"></div>
+                        <button class="add-item-btn bg-violet-400 hover:bg-violet-500 text-white text-[9px] px-2 py-1 rounded w-full" data-section="framework" data-list="col1Items">+</button>
+                    </div>
+                    
+                    <!-- Master Data Management Column -->
+                    <div class="space-y-1">
+                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1">
+                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate editable" data-section="framework" data-key="col2Title">Master Data Management</h4>
+                        </div>
+                        <div id="framework-col2-items" class="space-y-1"></div>
+                        <button class="add-item-btn bg-green-400 hover:bg-green-500 text-white text-[9px] px-2 py-1 rounded w-full" data-section="framework" data-list="col2Items">+</button>
+                    </div>
+                    
+                    <!-- Core Functions Column -->
+                    <div class="space-y-1">
+                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1">
+                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate editable" data-section="framework" data-key="col3Title">Core Functions</h4>
+                        </div>
+                        <div id="framework-col3-items" class="space-y-1"></div>
+                        <button class="add-item-btn bg-gray-400 hover:bg-gray-500 text-white text-[9px] px-2 py-1 rounded w-full" data-section="framework" data-list="col3Items">+</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Common Functionalities 1 Section -->
+            <div class="col-span-1 md:col-span-2" id="cf1-section">
+                <div class="card bg-purple-600 rounded h-8 flex items-center justify-center shadow-lg">
+                    <h2 class="text-white text-sm font-bold editable" data-section="cf1" data-key="title">Common Functionalities 1</h2>
+                </div>
+                
+                <!-- Squad Planning for CF1 -->
+                <div class="bg-purple-50 rounded-lg p-3 mt-2 mb-2 min-h-36">
+                    <h3 class="text-xs font-bold text-purple-800 mb-2 editable" data-section="cf1" data-key="squadTitle">Squad Planning</h3>
+                    <div id="cf1-squad-items" class="space-y-1 text-xs"></div>
+                    <button class="add-item-btn mt-2 bg-purple-500 hover:bg-purple-600 text-white text-xs px-2 py-1 rounded" data-section="cf1" data-list="squadItems">
+                        + Satır Ekle
+                    </button>
+                </div>
+                
+                <!-- CF1 Columns -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                    <div class="space-y-1">
+                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1">
+                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate editable" data-section="cf1" data-key="col1Title">Schedule & Flight Mgmt</h4>
+                        </div>
+                        <div id="cf1-col1-items" class="space-y-1"></div>
+                        <button class="add-item-btn bg-blue-400 hover:bg-blue-500 text-white text-[9px] px-2 py-1 rounded w-full" data-section="cf1" data-list="col1Items">+</button>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1">
+                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate editable" data-section="cf1" data-key="col2Title">Tariff & Rating</h4>
+                        </div>
+                        <div id="cf1-col2-items" class="space-y-1"></div>
+                        <button class="add-item-btn bg-orange-400 hover:bg-orange-500 text-white text-[9px] px-2 py-1 rounded w-full" data-section="cf1" data-list="col2Items">+</button>
+                    </div>
+                </div>
+                
+                <!-- CF1 Second Row -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                    <div class="space-y-1">
+                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1">
+                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate editable" data-section="cf1" data-key="col3Title">Capacity Management</h4>
+                        </div>
+                        <div id="cf1-col3-items" class="space-y-1"></div>
+                        <button class="add-item-btn bg-green-400 hover:bg-green-500 text-white text-[9px] px-2 py-1 rounded w-full" data-section="cf1" data-list="col3Items">+</button>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1">
+                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate editable" data-section="cf1" data-key="col4Title">Booking & Reservations</h4>
+                        </div>
+                        <div id="cf1-col4-items" class="space-y-1"></div>
+                        <button class="add-item-btn bg-purple-400 hover:bg-purple-500 text-white text-[9px] px-2 py-1 rounded w-full" data-section="cf1" data-list="col4Items">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Common Functionalities 2 Section -->
+            <div class="col-span-1 md:col-span-2" id="cf2-section">
+                <div class="card bg-pink-600 rounded h-8 flex items-center justify-center shadow-lg">
+                    <h2 class="text-white text-sm font-bold editable" data-section="cf2" data-key="title">Common Functionalities 2</h2>
+                </div>
+                
+                <!-- Squad Planning for CF2 -->
+                <div class="bg-pink-50 rounded-lg p-3 mt-2 mb-2 min-h-36">
+                    <h3 class="text-xs font-bold text-pink-800 mb-2 editable" data-section="cf2" data-key="squadTitle">Squad Planning</h3>
+                    <div id="cf2-squad-items" class="space-y-1 text-xs"></div>
+                    <button class="add-item-btn mt-2 bg-pink-500 hover:bg-pink-600 text-white text-xs px-2 py-1 rounded" data-section="cf2" data-list="squadItems">
+                        + Satır Ekle
+                    </button>
+                </div>
+                
+                <!-- CF2 Columns -->
+                <div class="grid grid-cols-1 gap-2 mt-2">
+                    <div class="space-y-1">
+                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1">
+                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate editable" data-section="cf2" data-key="col1Title">Customer Management</h4>
+                        </div>
+                        <div id="cf2-col1-items" class="space-y-1"></div>
+                        <button class="add-item-btn bg-pink-400 hover:bg-pink-500 text-white text-[9px] px-2 py-1 rounded w-full" data-section="cf2" data-list="col1Items">+</button>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1">
+                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate editable" data-section="cf2" data-key="col2Title">Restrictions & Embargo</h4>
+                        </div>
+                        <div id="cf2-col2-items" class="space-y-1"></div>
+                        <button class="add-item-btn bg-yellow-400 hover:bg-yellow-500 text-white text-[9px] px-2 py-1 rounded w-full" data-section="cf2" data-list="col2Items">+</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sales Section -->
+            <div class="col-span-1 md:col-span-3" id="sales-section">
+                <div class="card bg-green-600 rounded h-8 flex items-center justify-center shadow-lg">
+                    <h2 class="text-white text-sm font-bold editable" data-section="sales" data-key="title">Sales</h2>
+                </div>
+                
+                <!-- Squad Planning for Sales -->
+                <div class="bg-green-50 rounded-lg p-3 mt-2 mb-2 min-h-36">
+                    <h3 class="text-xs font-bold text-green-800 mb-2 editable" data-section="sales" data-key="squadTitle">Squad Planning</h3>
+                    <div id="sales-squad-items" class="space-y-1 text-xs"></div>
+                    <button class="add-item-btn mt-2 bg-green-500 hover:bg-green-600 text-white text-xs px-2 py-1 rounded" data-section="sales" data-list="squadItems">
+                        + Satır Ekle
+                    </button>
+                </div>
+                
+                <!-- Sales Columns -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-2 mt-2">
+                    <div class="space-y-1">
+                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1">
+                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate editable" data-section="sales" data-key="col1Title">AWB Stock</h4>
+                        </div>
+                        <div id="sales-col1-items" class="space-y-1"></div>
+                        <button class="add-item-btn bg-teal-400 hover:bg-teal-500 text-white text-[9px] px-2 py-1 rounded w-full" data-section="sales" data-list="col1Items">+</button>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1">
+                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate editable" data-section="sales" data-key="col2Title">Shipment Tracking</h4>
+                        </div>
+                        <div id="sales-col2-items" class="space-y-1"></div>
+                        <button class="add-item-btn bg-blue-400 hover:bg-blue-500 text-white text-[9px] px-2 py-1 rounded w-full" data-section="sales" data-list="col2Items">+</button>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1">
+                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate editable" data-section="sales" data-key="col3Title">Claim Mgmt</h4>
+                        </div>
+                        <div id="sales-col3-items" class="space-y-1"></div>
+                        <button class="add-item-btn bg-red-400 hover:bg-red-500 text-white text-[9px] px-2 py-1 rounded w-full" data-section="sales" data-list="col3Items">+</button>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <div class="card bg-white rounded h-6 flex items-center justify-center shadow-sm px-1">
+                            <h4 class="text-[10px] font-medium text-gray-900 text-center truncate editable" data-section="sales" data-key="col4Title">Special Cargo</h4>
+                        </div>
+                        <div id="sales-col4-items" class="space-y-1"></div>
+                        <button class="add-item-btn bg-indigo-400 hover:bg-indigo-500 text-white text-[9px] px-2 py-1 rounded w-full" data-section="sales" data-list="col4Items">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden file input for import -->
+    <input type="file" id="fileInput" accept=".json" style="display:none">
+
+    <script>
+        // Initial Data Structure - COMPLETE VERSION
+        let appData = {
+            global: {
+                mainTitle: "Sungur Framework - Squad Planning"
+            },
+            framework: {
+                title: "Framework",
+                squadTitle: "Squad Planning",
+                squadItems: [
+                    "Başlangıç: 1 PO + 3 Analyst",
+                    "Finalize: 1 PO + 2 Squad (Foxtrot + Golf) (Kanban)",
+                    "Framework önden başlar, temel altyapıyı hazırlar"
+                ],
+                col1Title: "Framework",
+                col1Items: [
+                    "Authentication",
+                    "Authorization",
+                    "Reusable Components",
+                    "Menu & Navigation",
+                    "Home",
+                    "My Space",
+                    "Quick Search",
+                    "Detailed Search",
+                    "Help & About",
+                    "Announcements",
+                    "Record History",
+                    "Record Activity History",
+                    "Filtering / Sorting",
+                    "Filter Saving",
+                    "Excel Export",
+                    "Bulk Operations",
+                    "Attachments",
+                    "API & Integration",
+                    "System Configuration",
+                    "Global Error Handling",
+                    "Global Data Validation",
+                    "Global Loading States",
+                    "Audit Logging",
+                    "Application Logging"
+                ],
+                col2Title: "Master Data Management",
+                col2Items: [
+                    "Routing Tables",
+                    "Products & Services",
+                    "Stations",
+                    "Airports",
+                    "Airport Pairs",
+                    "Countries",
+                    "Cities",
+                    "City Pairs",
+                    "Regions",
+                    "Airport Calendars",
+                    "Airlines",
+                    "Categories",
+                    "Commodities",
+                    "IATA Commodities",
+                    "Handling Codes",
+                    "Currencies",
+                    "Exchange Rates",
+                    "Aircraft Types",
+                    "Aircraft Equipment Types",
+                    "General Masters",
+                    "Generic Masters"
+                ],
+                col3Title: "Core Functions",
+                col3Items: [
+                    "User & User Group Management",
+                    "Role & Role Group Management",
+                    "Permission (Scope) Management",
+                    "Parameter Management",
+                    "Notification Management",
+                    "Purging & Archiving",
+                    "Scheduled Jobs",
+                    "Workflows",
+                    "Messaging",
+                    "Reporting",
+                    "Dashboards"
+                ]
+            },
+            cf1: {
+                title: "Common Functionalities 1",
+                squadTitle: "Squad Planning",
+                squadItems: [
+                    "Başlangıç: 2 PO + 3 Analyst",
+                    "Mid Level: 2 PO + 2 Squad",
+                    "Finalize: 3 PO + 4 Squad (Scrum)",
+                    "• 1 PO + 1 Squad (Hotel): Booking",
+                    "• 1 PO + 2 Squad (India + Juliet): 1 Squad: (Önce Customer Sonra Restrictions), 1 Squad: Flight",
+                    "• 1 PO + 2 Squad (Kilo + Lima): 1 Squad: Tariff, 1 Squad: Capacity"
+                ],
+                col1Title: "Schedule & Flight Mgmt",
+                col1Items: [
+                    "Maintain Flight Schedules",
+                    "List Flight Schedules",
+                    "Maintain Operational Flights",
+                    "List Operational Flights",
+                    "Mark Flight Movements",
+                    "Flight Notes"
+                ],
+                col2Title: "Tariff & Rating",
+                col2Items: [
+                    "Maintain Rate Cards",
+                    "List Rate Cards",
+                    "Maintain Tariffs",
+                    "List Tariffs",
+                    "Maintain Charge Heads",
+                    "List Charge Heads",
+                    "Maintain Spot Rate Requests",
+                    "List Spot Rate Requests"
+                ],
+                col3Title: "Capacity Management",
+                col3Items: [
+                    "List Allotments",
+                    "Maintain Allotments",
+                    "List Allotment Requests",
+                    "Maintain Allotment Requests"
+                ],
+                col4Title: "Booking & Reservations",
+                col4Items: [
+                    "Maintain Booking",
+                    "List Bookings"
+                ]
+            },
+            cf2: {
+                title: "Common Functionalities 2",
+                squadTitle: "Squad Planning",
+                squadItems: [
+                    "1 PO + 1 Squad (Hotel): Booking"
+                ],
+                col1Title: "Customer Management",
+                col1Items: [
+                    "Maintain Customer",
+                    "List Customers"
+                ],
+                col2Title: "Restrictions & Embargo",
+                col2Items: [
+                    "Maintain Embargo & Restrictions",
+                    "List Embargo & Restrictions",
+                    "Maintain Compliance Rules",
+                    "List Compliance Rules"
+                ]
+            },
+            sales: {
+                title: "Sales",
+                squadTitle: "Squad Planning",
+                squadItems: [
+                    "Başlangıç: 0 PO + 0 Analyst",
+                    "Finalize: 1 PO + 1 Squad (Mike) (Scrum)",
+                    "Sales modülleri son aşamada geliştirilir"
+                ],
+                col1Title: "AWB Stock",
+                col1Items: [
+                    "Maintain Stock",
+                    "View Stocks",
+                    "Maintain Stock Requests",
+                    "List Stock Requests",
+                    "Maintain Stock Holders",
+                    "List Stock Holders"
+                ],
+                col2Title: "Shipment Tracking",
+                col2Items: [
+                    "List Shipments",
+                    "External Shipment Tracking",
+                    "Internal Shipment Tracking",
+                    "House AWB Tracking"
+                ],
+                col3Title: "Claim Mgmt",
+                col3Items: [
+                    "List Claims",
+                    "Maintain Claim"
+                ],
+                col4Title: "Special Cargo",
+                col4Items: [
+                    "Maintain Special Cargo",
+                    "List Special Cargo"
+                ]
+            }
+        };
+
+        // Load from localStorage on startup
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('squadPlanningData');
+            if (saved) {
+                try {
+                    appData = JSON.parse(saved);
+                    console.log('✅ Veriler localStorage\'dan yüklendi:', appData);
+                } catch(e) {
+                    console.error('❌ localStorage parse hatası:', e);
+                }
+            }
+        }
+
+        // Save to localStorage
+        function saveToLocalStorage() {
+            localStorage.setItem('squadPlanningData', JSON.stringify(appData));
+            console.log('💾 Veriler localStorage\'a kaydedildi');
+        }
+
+        // Make text editable on click
+        function makeEditable(el, section, key) {
+            el.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (el.querySelector('input')) return;
+                
+                const currentText = el.textContent;
+                const input = document.createElement('input');
+                input.value = currentText;
+                input.className = 'edit-input ' + el.className.replace('editable', '');
+                
+                input.onblur = function() {
+                    const newValue = input.value;
+                    el.textContent = newValue;
+                    appData[section][key] = newValue;
+                    saveToLocalStorage();
+                };
+                
+                input.onkeydown = function(e) {
+                    if (e.key === 'Enter') input.blur();
+                    if (e.key === 'Escape') {
+                        el.textContent = currentText;
+                    }
+                };
+                
+                el.textContent = '';
+                el.appendChild(input);
+                input.focus();
+                input.select();
+            });
+        }
+
+        // Render list items with delete buttons
+        function renderList(section, listKey, containerId, bgColor, textColor) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            const items = appData[section][listKey];
+            items.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = `item-row ${bgColor} rounded px-2 py-1`;
+                
+                const span = document.createElement('span');
+                span.textContent = item;
+                span.className = `item-text text-[9px] ${textColor} font-medium editable cursor-text`;
+                span.onclick = function(e) {
+                    e.stopPropagation();
+                    if (span.querySelector('input')) return;
+                    const currentText = span.textContent;
+                    const input = document.createElement('input');
+                    input.value = currentText;
+                    input.className = 'edit-input text-[9px]';
+                    input.onblur = function() {
+                        const newValue = input.value;
+                        span.textContent = newValue;
+                        appData[section][listKey][idx] = newValue;
+                        saveToLocalStorage();
+                    };
+                    input.onkeydown = function(e) {
+                        if (e.key === 'Enter') input.blur();
+                        if (e.key === 'Escape') span.textContent = currentText;
+                    };
+                    span.textContent = '';
+                    span.appendChild(input);
+                    input.focus();
+                    input.select();
+                };
+                
+                const delBtn = document.createElement('button');
+                delBtn.className = 'delete-btn';
+                delBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" height="14" width="14">
+                        <path stroke="#e44" stroke-width="2" d="M6 8v6m4-6v6m4-8v8a2 2 0 01-2 2H8a2 2 0 01-2-2V6m9-2v2H3V4h3.5l1-1h4l1 1H17z"/>
+                    </svg>
+                `;
+                delBtn.title = "Sil";
+                delBtn.onclick = function() {
+                    if(confirm('Bu öğeyi silmek istediğinize emin misiniz?')) {
+                        appData[section][listKey].splice(idx, 1);
+                        renderList(section, listKey, containerId, bgColor, textColor);
+                        saveToLocalStorage();
+                    }
+                };
+                
+                div.appendChild(span);
+                div.appendChild(delBtn);
+                container.appendChild(div);
+            });
+        }
+
+        // Initialize
+        function initialize() {
+            loadFromLocalStorage();
+            
+            // Initialize editables
+            document.querySelectorAll('.editable').forEach(el => {
+                const section = el.dataset.section;
+                const key = el.dataset.key;
+                if (section && key) {
+                    if(appData[section] && appData[section][key]) {
+                        el.textContent = appData[section][key];
+                    }
+                    makeEditable(el, section, key);
+                }
+            });
+
+            // Render all lists
+            renderList('framework', 'squadItems', 'framework-squad-items', '', 'text-orange-700');
+            renderList('framework', 'col1Items', 'framework-col1-items', 'bg-violet-50', 'text-violet-800');
+            renderList('framework', 'col2Items', 'framework-col2-items', 'bg-green-50', 'text-green-800');
+            renderList('framework', 'col3Items', 'framework-col3-items', 'bg-gray-50', 'text-gray-800');
+            
+            renderList('cf1', 'squadItems', 'cf1-squad-items', '', 'text-purple-700');
+            renderList('cf1', 'col1Items', 'cf1-col1-items', 'bg-blue-50', 'text-blue-800');
+            renderList('cf1', 'col2Items', 'cf1-col2-items', 'bg-orange-50', 'text-orange-800');
+            renderList('cf1', 'col3Items', 'cf1-col3-items', 'bg-green-50', 'text-green-800');
+            renderList('cf1', 'col4Items', 'cf1-col4-items', 'bg-purple-50', 'text-purple-800');
+            
+            renderList('cf2', 'squadItems', 'cf2-squad-items', '', 'text-pink-700');
+            renderList('cf2', 'col1Items', 'cf2-col1-items', 'bg-pink-50', 'text-pink-800');
+            renderList('cf2', 'col2Items', 'cf2-col2-items', 'bg-yellow-50', 'text-yellow-800');
+            
+            renderList('sales', 'squadItems', 'sales-squad-items', '', 'text-green-700');
+            renderList('sales', 'col1Items', 'sales-col1-items', 'bg-teal-50', 'text-teal-800');
+            renderList('sales', 'col2Items', 'sales-col2-items', 'bg-blue-50', 'text-blue-800');
+            renderList('sales', 'col3Items', 'sales-col3-items', 'bg-red-50', 'text-red-800');
+            renderList('sales', 'col4Items', 'sales-col4-items', 'bg-indigo-50', 'text-indigo-800');
+        }
+
+        // Add item buttons
+        document.querySelectorAll('.add-item-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const section = btn.dataset.section;
+                const listKey = btn.dataset.list;
+                appData[section][listKey].push("Yeni öğe...");
+                
+                const colorMap = {
+                    'framework-squadItems': ['', 'text-orange-700'],
+                    'framework-col1Items': ['bg-violet-50', 'text-violet-800'],
+                    'framework-col2Items': ['bg-green-50', 'text-green-800'],
+                    'framework-col3Items': ['bg-gray-50', 'text-gray-800'],
+                    'cf1-squadItems': ['', 'text-purple-700'],
+                    'cf1-col1Items': ['bg-blue-50', 'text-blue-800'],
+                    'cf1-col2Items': ['bg-orange-50', 'text-orange-800'],
+                    'cf1-col3Items': ['bg-green-50', 'text-green-800'],
+                    'cf1-col4Items': ['bg-purple-50', 'text-purple-800'],
+                    'cf2-squadItems': ['', 'text-pink-700'],
+                    'cf2-col1Items': ['bg-pink-50', 'text-pink-800'],
+                    'cf2-col2Items': ['bg-yellow-50', 'text-yellow-800'],
+                    'sales-squadItems': ['', 'text-green-700'],
+                    'sales-col1Items': ['bg-teal-50', 'text-teal-800'],
+                    'sales-col2Items': ['bg-blue-50', 'text-blue-800'],
+                    'sales-col3Items': ['bg-red-50', 'text-red-800'],
+                    'sales-col4Items': ['bg-indigo-50', 'text-indigo-800']
+                };
+                
+                const key = `${section}-${listKey}`;
+                const colors = colorMap[key];
+                const containerId = key.replace('Items', '-items');
+                
+                renderList(section, listKey, containerId, colors[0], colors[1]);
+                saveToLocalStorage();
+            });
+        });
+
+        // Save button
+        document.getElementById('saveBtn').addEventListener('click', function() {
+            saveToLocalStorage();
+            const now = new Date().toISOString().replace('T', ' ').substring(0, 19);
+            console.log("💾 VERİ KAYDEDİLDİ:", appData);
+            alert(`✅ Veriler kaydedildi!\n\nKullanıcı: M-UYAR2_logitech\nTarih: ${now} UTC`);
+        });
+
+        // Export JSON button
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            const dataStr = JSON.stringify(appData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
+            a.download = `squad-planning-${timestamp}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        // Import JSON button
+        document.getElementById('importBtn').addEventListener('click', function() {
+            document.getElementById('fileInput').click();
+        });
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    appData = JSON.parse(e.target.result);
+                    saveToLocalStorage();
+                    alert('✅ Veriler başarıyla yüklendi! Sayfa yenileniyor...');
+                    location.reload();
+                } catch(err) {
+                    alert('❌ Hata: Geçersiz JSON dosyası!');
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        // Initialize on load
+        initialize();
+    </script>
+</body>
+</html>
